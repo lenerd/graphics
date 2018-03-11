@@ -1,0 +1,73 @@
+\documentclass[beamer]{standalone}
+
+\usepackage{tikz}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{fit}
+\usetikzlibrary{positioning}
+
+\begin{document}
+
+\begin{standaloneframe}
+
+\definecolor{almost-white}{RGB}{254,254,254}
+\definecolor{alert-mtheme}{RGB}{235,129,27}
+\begin{tikzpicture}[
+    background rectangle/.style={ draw=almost-white, },
+    show background rectangle,
+    arrow/.style = {->,-latex},
+]
+    \node [
+        fill=black!10,
+        rounded corners,
+        minimum width=3cm,
+        minimum height=1.5cm,
+    ]
+    (F) {\(\mathcal{F}(x, y)\)};
+
+    \draw [dashed] (F.north) to ++(0, 1.5);
+    \draw [dashed] (F.south) to ++(0, -1.5);
+
+    \only<1,3>{ % not highlight alice
+        \node [above left=1cm and .5cm of F.north west]
+            (alice) {\textbf{Alice}};
+        \node [above left=.5cm and 1cm of F.north west, anchor=base]
+            (x) {\(x\)};
+        \node [below left=.5cm and 1cm of F.south west, anchor=north]
+            (f1) {\(f_1(x, y)\)};
+        \draw [arrow, bend left] (x.east) to ([xshift=-1cm]F.north);
+        \draw [arrow, bend left] ([xshift=-1cm]F.south) to (f1.east);
+    }
+    \only<2>{ % highlight alice
+        \node [above left=1cm and .5cm of F.north west, alert-mtheme]
+            (alice) {\textbf{Alice}};
+        \node [above left=.5cm and 1cm of F.north west, anchor=base, alert-mtheme]
+            (x) {\(x\)};
+        \node [below left=.5cm and 1cm of F.south west, anchor=north, alert-mtheme]
+            (f1) {\(f_1(x, y)\)};
+        \draw [arrow, bend left, alert-mtheme] (x.east) to ([xshift=-1cm]F.north);
+        \draw [arrow, bend left, alert-mtheme] ([xshift=-1cm]F.south) to (f1.east);
+    }
+    \only<-2>{ % not highlight bob
+    \node [above right=1cm and .5cm of F.north east] (bob) {\textbf{Bob}};
+        \node [above right=.5cm and 1cm of F.north east, anchor=base] (y) {\(y\)};
+        \node [below right=.5cm and 1cm of F.south east, anchor=north] (f2) {\(f_2(x, y)\)};
+        \draw [arrow, bend right] (y.west) to ([xshift=+1cm]F.north);
+        \draw [arrow, bend right] ([xshift=+1cm]F.south) to (f2.west);
+    }
+    \only<3>{ % highlight bob
+        \node [above right=1cm and .5cm of F.north east, alert-mtheme]
+            (bob) {\textbf{Bob}};
+        \node [above right=.5cm and 1cm of F.north east, anchor=base, alert-mtheme]
+            (y) {\(y\)};
+        \node [below right=.5cm and 1cm of F.south east, anchor=north, alert-mtheme]
+            (f2) {\(f_2(x, y)\)};
+        \draw [arrow, bend right, alert-mtheme] (y.west) to ([xshift=+1cm]F.north);
+        \draw [arrow, bend right, alert-mtheme] ([xshift=+1cm]F.south) to (f2.west);
+    }
+
+
+\end{tikzpicture}
+
+\end{standaloneframe}
+
+\end{document}

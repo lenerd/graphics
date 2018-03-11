@@ -1,0 +1,77 @@
+\documentclass[crop, beamer]{standalone}
+
+\usepackage{eurosym}
+\usepackage{tikz}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shapes}
+
+\usepackage{ifthen}
+
+\begin{document}
+
+\begin{standaloneframe}
+
+\definecolor{almost-white}{RGB}{254,254,254}
+\begin{tikzpicture}[%
+        % same size for all cropped pages
+        background rectangle/.style={ draw=almost-white, },
+        show background rectangle,
+        comm/.style = {
+            -latex,
+        },
+        pics/party/.style n args={1}{
+            code={
+                \node (head) [ circle, draw, inner sep=0, minimum size=.4cm, ] {};
+                \node (body-top) [coordinate, below=.3cm of head] {};
+                \node (body-bot) [coordinate, below=.5cm of body-top] {};
+                \ifthenelse{\equal{####1}{t}}{
+                    \node (halo) [ ellipse, draw, inner sep=0, minimum width =
+                    .3cm, minimum height = .1cm, above=.05cm of head, ] {};
+                    \node (cloud) [ inner sep=0, draw, cloud, below=.4cm of
+                    body-top, minimum width=1.2cm, minimum height=.8cm, ] {};
+                }{}
+                %
+                \draw (head) -- (body-top) -- (body-bot);
+                \draw (body-top) to ++(150:.6);
+                \draw (body-top) to ++(30:.6);
+                \draw (body-bot) to ++(-120:.6);
+                \draw (body-bot) to ++(-60:.6);
+                %
+                \node (-center) [coordinate, below=.25cm of body-top] {};
+            }
+        },
+        pics/party/.default={u},
+]
+
+
+\node (p1) at (+145:4) {\tikz\pic {party};};
+\node (p2) at (+35:4) {\tikz\pic {party};};
+\node (n1) [above=.4cm of p1] {Alice};
+\node (n2) [above=.4cm of p2] {Bob};
+\node (ttp) at (0,0) {\tikz\pic {party=t};};
+
+\pause
+
+\draw [comm] (p1)  to [bend left=10] node[above=.5cm,pos=.7] {47M\euro} (ttp);
+\draw [comm] (p2)  to [bend right=10] node[above=.5cm,pos=.7] {42M\euro} (ttp);
+
+\pause
+
+\node [
+    % above=of ttp,
+    right=of ttp,
+    yshift=-.5cm,
+    ellipse callout,
+    callout absolute pointer={([yshift=-.55cm]ttp.north)},
+    fill=white,
+    minimum height=1cm,
+    draw,
+] {Alice ist reicher!};
+
+
+\end{tikzpicture}
+
+\end{standaloneframe}
+
+\end{document}

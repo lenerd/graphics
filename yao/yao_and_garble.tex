@@ -1,0 +1,112 @@
+\documentclass[crop, beamer]{standalone}
+
+\usepackage{tikz}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{positioning}
+
+\begin{document}
+
+\begin{standaloneframe}
+
+\definecolor{almost-white}{RGB}{254,254,254}
+\begin{tikzpicture}[%
+        % same size for all cropped pages
+        background rectangle/.style={ draw=almost-white, },
+        show background rectangle,
+        gate/.style={draw, circle, inner sep=.05cm},
+        wire/.style={-latex},
+        key/.style={
+            node contents={\includegraphics[width=.5cm]{Key-yellow.pdf}},
+        },
+        key-white/.style={
+            node contents={\includegraphics[width=.5cm]{Key-white.pdf}},
+        },
+        key-black/.style={
+            node contents={\includegraphics[width=.5cm]{Key-black.pdf}},
+        },
+        key-black-white/.style={
+            node contents={\includegraphics[width=.6cm]{Key-black-white.pdf}},
+        },
+        lock/.style={
+            node contents={\includegraphics[height=.5cm]{Lock-gold.pdf}},
+        },
+        lock-white/.style={
+            node contents={\includegraphics[height=.5cm]{Lock-white.pdf}},
+        },
+        lock-black/.style={
+            node contents={\includegraphics[height=.5cm]{Lock-black.pdf}},
+        },
+        pics/garble-box/.style n args={3}{
+            code={
+                \node (key) [draw] at (0,0) {\includegraphics[width=.5cm]{Key-####3.pdf}};
+                \node (lock0) at (key.south west) [anchor=center] {\includegraphics[height=.5cm]{Lock-####1.pdf}};
+                \node (lock1) at (key.south east) [anchor=center] {\includegraphics[height=.5cm]{Lock-####2.pdf}};
+                \coordinate (-c) at (key.center);
+                \coordinate (-base-east) at (key.base east);
+                \coordinate (-north-west) at (key.north west);
+                \coordinate (-south-west) at (key.south west);
+            },
+        },
+]
+
+% half adder
+\node [font=\normalsize] (a) at (0,4) {\(A\)};
+\node [font=\normalsize] (b) at (2,4) {\(B\)};
+\node [font=\normalsize] (c) at (1,0) {\(C\)};
+
+\node [gate] (and) at (1,2) {\(\land\)};
+
+
+\draw [wire] (a) to (and);
+\draw [wire] (b) to (and);
+\draw [wire] (and) to (c);
+
+\pause
+
+\draw [wire] (a) to node (key-a) [key-black-white] {} (and);
+\draw [wire] (b) to node (key-b) [key-black-white] {} (and);
+\draw [wire] (and) to node (key-c) [key-black-white] {} (c);
+
+\node (legend0) [below=.5 of c] {\(0 \rightarrow\) \includegraphics[width=.5cm]{Key-white}};
+\node (legend1) [right=.1 of legend0] {\(1 \rightarrow\) \includegraphics[width=.5cm]{Key-black}};
+
+\pause
+
+\pic [above right=1 and 2 of and] (box00) {garble-box={white}{white}{white}};
+\node [right=1 of box00-base-east, anchor=base west] (enc-00) {\(E_{k_a^0}(E_{k_b^0}(k_c^0))\)};
+
+\draw [wire, bend left, out=60, in=90] (key-a) to ([xshift=-0.7cm]enc-00.north);
+\draw [wire, bend left, in=90] (key-b) to ([xshift=.0cm]enc-00.north);
+\only<3>{
+\draw [wire, in=-90] (key-c) to ([xshift=.5cm]enc-00.south);
+}
+
+\pause
+
+\pic [below=.7 of box00-c] (box01) {garble-box={white}{black}{white}};
+\pic [below=.7 of box01-c] (box10) {garble-box={black}{white}{white}};
+\pic [below=.7 of box10-c] (box11) {garble-box={black}{black}{black}};
+\node [right=1 of box01-base-east, anchor=base west] {\(E_{k_a^0}(E_{k_b^1}(k_c^0))\)};
+\node [right=1 of box10-base-east, anchor=base west] {\(E_{k_a^1}(E_{k_b^0}(k_c^0))\)};
+\node [right=1 of box11-base-east, anchor=base west] {\(E_{k_a^1}(E_{k_b^1}(k_c^1))\)};
+
+
+\node [right=.25 of and] (and-tab) {\tikz{
+            \draw (0,.0) to (.5,.0);
+            \draw (0,.1) to (.5,.1);
+            \draw (0,.2) to (.5,.2);
+            \draw (0,.3) to (.5,.3);
+            \draw (0,.4) to (.5,.4);
+    }};
+\draw [
+    thick,
+    decoration={ brace, mirror, amplitude=.3cm, raise=0.4cm },
+    decorate,
+] (box00-north-west) to (box11-south-west);
+
+\end{tikzpicture}
+
+\end{standaloneframe}
+
+\end{document}

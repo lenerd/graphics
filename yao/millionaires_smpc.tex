@@ -1,0 +1,59 @@
+\documentclass[beamer]{standalone}
+
+\usepackage{tikz}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{fit}
+\usetikzlibrary{positioning}
+
+\usepackage{amsmath}
+\usepackage{sfmath}
+\renewcommand*\familydefault{\sfdefault} %%
+
+\begin{document}
+
+\begin{standaloneframe}
+
+\definecolor{almost-white}{RGB}{254,254,254}
+\begin{tikzpicture}[
+    % same size for all cropped pages
+    background rectangle/.style={ draw=almost-white, },
+    show background rectangle,
+    arrow/.style = {->,-latex},
+]
+    \node [
+        fill=black!10,
+        rounded corners,
+        minimum width=3cm,
+        minimum height=1.5cm,
+    ]
+    (F) {};
+    \node [circle, draw] (leq) {\(\leq\)};
+
+    \draw [dashed] (F.north) to ++(0, 1.5);
+
+    \node [above left=1cm and .5cm of F.north west]
+        (alice) {\textbf{Alice}};
+    \node [above right=1cm and .5cm of F.north east]
+        (bob) {\textbf{Bob}};
+    \node [above left=.5cm and 1cm of F.north west, anchor=base]
+        (x) {\(x\)};
+    \node [above right=.5cm and 1cm of F.north east, anchor=base]
+        (y) {\(y\)};
+    \draw [arrow, bend left] (x.east) to (leq);
+    \draw [arrow, bend right] (y.west) to (leq);
+
+    \node [below=.5cm of F] (f12) {\(
+            f_1(x,y) = f_2(x,y) =
+            \begin{cases}
+                1 & \text{if } x \leq y \\
+                0 & \text{else}
+            \end{cases}
+    \)};
+
+    \draw [arrow] (leq) to (f12.north);
+
+\end{tikzpicture}
+
+\end{standaloneframe}
+
+\end{document}

@@ -1,0 +1,85 @@
+\documentclass[crop, beamer]{standalone}
+
+\usepackage{tikz}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{positioning}
+
+\begin{document}
+
+\begin{standaloneframe}
+
+\definecolor{almost-white}{RGB}{254,254,254}
+\begin{tikzpicture}[%
+        % same size for all cropped pages
+        background rectangle/.style={ draw=almost-white, },
+        show background rectangle,
+        gate/.style={draw, circle, inner sep=.05cm},
+        wire/.style={-latex},
+        key/.style={
+            node contents={\includegraphics[width=.5cm]{Key-gold.pdf}},
+        },
+        key-white/.style={
+            node contents={\includegraphics[width=.5cm]{Key-white.pdf}},
+        },
+        key-black/.style={
+            node contents={\includegraphics[width=.5cm]{Key-black.pdf}},
+        },
+        key-black-white/.style={
+            node contents={\includegraphics[width=.6cm]{Key-black-white.pdf}},
+        },
+]
+
+% half adder
+\node [font=\normalsize] (a) at (0,4) {\(A\)};
+\node [font=\normalsize] (b) at (2,4) {\(B\)};
+\node [font=\normalsize] (s) at (0,0) {\(S\)};
+\node [font=\normalsize] (cout) at (2,0) {\(C_{out}\)};
+
+\node [gate] (xor1) at (0,2) {\(\oplus\)};
+\node [gate] (and1) at (2,2) {\(\land\)};
+
+\draw [wire] (a) to (xor1);
+\draw [wire] (a) to ++(0, -.5) to (and1);
+\draw [wire] (b) to ++(0, -.5) to (xor1);
+\draw [wire] (b) to (and1);
+\draw [wire] (xor1) to (s);
+\draw [wire] (and1) to (cout);
+
+\path (a) to node [key, pos=.2] {} (xor1);
+\path (b) to node [key, pos=.2] {} (and1);
+
+\node [left=.25 of xor1] (xor-tab) {\tikz{
+            \draw (0,.0) to (.5,.0);
+            \draw (0,.1) to (.5,.1);
+            \draw (0,.2) to (.5,.2);
+            \draw (0,.3) to (.5,.3);
+            \draw (0,.4) to (.5,.4);
+    }};
+\node [right=.25 of and1] (and-tab) {\tikz{
+            \draw (0,.0) to (.5,.0);
+            \draw (0,.1) to (.5,.1);
+            \draw (0,.2) to (.5,.2);
+            \draw (0,.3) to (.5,.3);
+            \draw (0,.4) to (.5,.4);
+    }};
+
+\pause
+
+\path (xor1) to node (key-s) [key] {} (s);
+\path (and1) to node (key-cout) [key] {} (cout);
+
+\pause
+
+\node (map-s-0) [below right=.3cm and 0cm of s] {\includegraphics[width=.5cm]{Key-white} \(\mapsto 0\)};
+\node (map-s-1) [below=.05cm of map-s-0] {\includegraphics[width=.5cm]{Key-black} \(\mapsto 1\)};
+\node (map-cout-0) [below right=.3cm and 0cm of cout] {\includegraphics[width=.5cm]{Key-white} \(\mapsto 0\)};
+\node (map-cout-1) [below=.05cm of map-cout-0] {\includegraphics[width=.5cm]{Key-black} \(\mapsto 1\)};
+
+\draw [wire, bend left, out=30] (key-s) to (map-s-0);
+\draw [wire, bend left, out=30] (key-cout) to (map-cout-0);
+
+\end{tikzpicture}
+
+\end{standaloneframe}
+
+\end{document}

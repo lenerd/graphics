@@ -1,0 +1,130 @@
+\documentclass[crop, beamer]{standalone}
+
+\usepackage{tikz}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{positioning}
+
+\usepackage{ifthen}
+
+\begin{document}
+
+\begin{standaloneframe}
+
+\definecolor{almost-white}{RGB}{254,254,254}
+\begin{tikzpicture}[%
+        % same size for all cropped pages
+        background rectangle/.style={ draw=almost-white, },
+        show background rectangle,
+        gate/.style={draw, circle, inner sep=.05cm},
+        wire/.style={-latex},
+        key/.style={
+            node contents={\includegraphics[width=.5cm]{Key-gold.pdf}},
+        },
+        key-white/.style={
+            node contents={\includegraphics[width=.5cm]{Key-white.pdf}},
+        },
+        key-black/.style={
+            node contents={\includegraphics[width=.5cm]{Key-black.pdf}},
+        },
+        key-black-white/.style={
+            node contents={\includegraphics[width=.6cm]{Key-black-white.pdf}},
+        },
+        lock/.style={
+            node contents={\includegraphics[height=.5cm]{Lock-gold.pdf}},
+        },
+        lock-white/.style={
+            node contents={\includegraphics[height=.5cm]{Lock-white.pdf}},
+        },
+        lock-black/.style={
+            node contents={\includegraphics[height=.5cm]{Lock-black.pdf}},
+        },
+        pics/garble-box/.style n args={3}{
+            code={
+                \ifthenelse{\equal{####1}{none} \AND \equal{####2}{none}}{
+                    \node (key) at (0,0)
+                    {\includegraphics[width=.5cm]{Key-####3.pdf}};
+                }{
+                    \node (key) [draw] at (0,0)
+                    {\includegraphics[width=.5cm]{Key-####3.pdf}};
+                }
+                \ifthenelse{\equal{####1}{none}}{}
+                {\node (lock0) at (key.south west) [anchor=center] {\includegraphics[height=.5cm]{Lock-####1.pdf}};}
+                \ifthenelse{\equal{####2}{none}}{}
+                {\node (lock1) at (key.south east) [anchor=center] {\includegraphics[height=.5cm]{Lock-####2.pdf}};}
+                \coordinate (-c) at (key.center);
+                \coordinate (-base-east) at (key.base east);
+                \coordinate (-west) at (key.west);
+                \coordinate (-north-west) at (key.north west);
+                \coordinate (-south-west) at (key.south west);
+            },
+        },
+]
+
+% half adder
+\node [font=\normalsize] (a) at (0,4) {\(A\)};
+\node [font=\normalsize] (b) at (2,4) {\(B\)};
+\node [font=\normalsize] (c) at (1,0) {\(C\)};
+
+\node [gate] (and) at (1,2) {\(\land\)};
+
+\draw [wire] (a) to node (key-a) [key] {} (and);
+\draw [wire] (b) to node (key-b) [key] {} (and);
+\draw [wire] (and) to (c);
+
+
+\node [right=.25 of and] (and-tab) {\tikz{
+            \draw (0,.0) to (.5,.0);
+            \draw (0,.1) to (.5,.1);
+            \draw (0,.2) to (.5,.2);
+            \draw (0,.3) to (.5,.3);
+            \draw (0,.4) to (.5,.4);
+    }};
+
+
+\only<1>{
+\pic [above right=1 and 2 of and] (box00) {garble-box={gold}{gold}{gold}};
+}
+\only<2->{
+\pic [above right=1 and 2 of and] (box00) {garble-box={gold}{none}{gold}};
+}
+\only<1-2>{
+\pic [below=.7 of box00-c] (box01) {garble-box={gold}{gold}{gold}};
+\pic [below=.7 of box01-c] (box10) {garble-box={gold}{gold}{gold}};
+\pic [below=.7 of box10-c] (box11) {garble-box={gold}{gold}{gold}};
+}
+\only<3->{
+\pic [below=.7 of box00-c] (box01) {garble-box={gold}{gold}{gold}};
+\pic [below=.7 of box01-c] (box10) {garble-box={none}{none}{gold}};
+\pic [below=.7 of box10-c] (box11) {garble-box={none}{gold}{gold}};
+}
+\draw [
+    thick,
+    decoration={ brace, mirror, amplitude=.3cm, raise=0.4cm },
+    decorate,
+] (box00-north-west) to (box11-south-west);
+
+\pause
+
+\node [right=4 of box00-base-east, anchor=base east] (dec-00) {\(\bot \gets D_{k_a^\sigma}(D_{k_b^\tau}(c_{00}))\)};
+
+\draw [wire, bend left, out=60, in=90] (key-a) to ([xshift=-0.2cm]dec-00.north);
+\draw [wire, bend left, in=90] (key-b) to ([xshift=.5cm]dec-00.north);
+
+\pause
+
+\node [right=4 of box01-base-east, anchor=base east] (dec-01) {\(\bot \gets D_{k_a^\sigma}(D_{k_b^\tau}(c_{01}))\)};
+\node [right=4 of box10-base-east, anchor=base east] (dec-10) {\(k_c^{\sigma \land \tau} \gets D_{k_a^\sigma}(D_{k_b^\tau}(c_{10}))\)};
+\node [right=4 of box11-base-east, anchor=base east] {\(\bot \gets D_{k_a^\sigma}(D_{k_b^\tau}(c_{11}))\)};
+
+
+\pause
+
+\draw [wire] (and) to node (key-c) [key] {} (c);
+\draw [wire, out=180, in=30] (box10-west) to (key-c);
+
+\end{tikzpicture}
+
+\end{standaloneframe}
+
+\end{document}

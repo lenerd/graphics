@@ -1,0 +1,38 @@
+\documentclass[class=beamer]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+
+\beamertemplatenavigationsymbolsempty 
+
+\usepackage[%
+    asymptotics,
+    probability,
+]{cryptocode}
+\usepackage{mathtools}
+
+
+\begin{document}
+
+\fbox{\procedure{}{
+        \makebox[2cm]{\textbf{Alice}} \> \> \textbf{Trent} \> \> \makebox[2cm]{\textbf{Bob}} \\[1em]
+        k_0 \gets_R \{0,1\}^n \> \> \> \> b \in \{0,1\} \\
+        k_1 \gets_R \{0,1\}^n \\
+        \> \sendmessageright{
+        length={2cm},
+        centercol={3},
+        top={\(k_0, k_1\)},
+    } \> \>
+    \sendmessageleft{
+        length={2cm},
+        centercol={3},
+        top={\(b\)},
+    } \> \\
+    \> \> \> \sendmessageright{
+        length={2cm},
+        centercol={3},
+        top={\(k_b\)},
+    } \> \\
+}}
+
+\end{document}

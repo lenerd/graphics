@@ -1,0 +1,93 @@
+\documentclass[crop, beamer]{standalone}
+
+\usepackage{tikz}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shapes}
+
+\usepackage{ifthen}
+
+\begin{document}
+
+\begin{standaloneframe}
+
+\definecolor{almost-white}{RGB}{254,254,254}
+\begin{tikzpicture}[%
+        % same size for all cropped pages
+        background rectangle/.style={ draw=almost-white, },
+        show background rectangle,
+        comm/.style = {
+            latex-,
+        },
+        pics/party/.style n args={1}{
+            code={
+                \node (head) [ circle, draw, inner sep=0, minimum size=.4cm, ] {};
+                \node (body-top) [coordinate, below=.3cm of head] {};
+                \node (body-bot) [coordinate, below=.5cm of body-top] {};
+                \ifthenelse{\equal{####1}{t}}{
+                    \node (halo) [ ellipse, draw, inner sep=0, minimum width =
+                    .3cm, minimum height = .1cm, above=.05cm of head, ] {};
+                    \node (cloud) [ inner sep=0, draw, cloud, below=.4cm of
+                    body-top, minimum width=1.2cm, minimum height=.8cm, ] {};
+                }{}
+                %
+                \draw (head) -- (body-top) -- (body-bot);
+                \draw (body-top) to ++(150:.6);
+                \draw (body-top) to ++(30:.6);
+                \draw (body-bot) to ++(-120:.6);
+                \draw (body-bot) to ++(-60:.6);
+                %
+                \node (-center) [coordinate, below=.25cm of body-top] {};
+            }
+        },
+        pics/party/.default={u},
+]
+
+
+\node (p1) at (-135:3) {\tikz\pic {party};};
+\node (p2) at (+135:3) {\tikz\pic {party};};
+\node (p3) at (+45:3)  {\tikz\pic {party};};
+\node (p4) at (-45:3)  {\tikz\pic {party};};
+
+\only<2-3>{
+    \node (ttp) at (0,0) {\tikz\pic {party=t};};
+    \draw [comm] (p1)  to [bend left=10] (ttp);
+    \draw [comm] (ttp) to [bend left=10] (p1);
+    \draw [comm] (p2)  to [bend left=10] (ttp);
+    \draw [comm] (ttp) to [bend left=10] (p2);
+    \draw [comm] (p3)  to [bend left=10] (ttp);
+    \draw [comm] (ttp) to [bend left=10] (p3);
+    \draw [comm] (p4)  to [bend left=10] (ttp);
+    \draw [comm] (ttp) to [bend left=10] (p4);
+}
+\only<3>{
+    \node [
+        forbidden sign, draw,
+        minimum size=2cm,
+        line width=.8ex,
+    ] at (0,0) {};
+}
+
+\only<4>{
+    \draw [comm] (p1)  to [bend left=10] (p2);
+    \draw [comm] (p2) to [bend left=10] (p1);
+    \draw [comm] (p1)  to [bend left=10] (p3);
+    \draw [comm] (p3) to [bend left=10] (p1);
+    \draw [comm] (p1)  to [bend left=10] (p4);
+    \draw [comm] (p4) to [bend left=10] (p1);
+
+    \draw [comm] (p2)  to [bend left=10] (p3);
+    \draw [comm] (p3) to [bend left=10] (p2);
+    \draw [comm] (p2)  to [bend left=10] (p4);
+    \draw [comm] (p4) to [bend left=10] (p2);
+
+    \draw [comm] (p3)  to [bend left=10] (p4);
+    \draw [comm] (p4) to [bend left=10] (p3);
+}
+
+
+\end{tikzpicture}
+
+\end{standaloneframe}
+
+\end{document}

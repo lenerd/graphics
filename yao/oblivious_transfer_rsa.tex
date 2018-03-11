@@ -1,0 +1,45 @@
+\documentclass[class=beamer]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+
+\beamertemplatenavigationsymbolsempty 
+
+\usepackage[%
+    asymptotics,
+    probability,
+]{cryptocode}
+\usepackage{mathtools}
+
+
+\begin{document}
+
+\fbox{\procedure{}{
+    \makebox[2cm]{\textbf{Alice}} \> \> \makebox[2cm]{\textbf{Bob}} \\[1em]
+    \text{Private-Key: } (e, d, N) \> \> \text{Public-Key: } (e, N) \\
+    k_0, k_1 \gets_R \{0,1\}^n \> \> b \in \{0,1\} \\
+    \\
+    x_0, x_1 \gets_R \{0,1\}^n \\
+    \> \sendmessageright{
+        length={2cm},
+        centercol={3},
+        top={\(x_0, x_1\)},
+    } \> \\
+    \> \> y \gets_R \{0,1\}^n \\
+    \> \> v \gets x_b + y^e \\
+    \> \sendmessageleft{
+        length={2cm},
+        centercol={3},
+        top={\(v\)},
+    } \> \\
+    y_i \gets (v - x_i)^d \text{ für } i \in \{0, 1\} \\
+    k_i' \gets k_i + y_i \text{ für } i \in \{0, 1\} \\
+    \> \sendmessageright{
+        length={2cm},
+        centercol={3},
+        top={\(k_0', k_1'\)},
+    } \> \\
+    \> \> k_b = k_b' - y
+}}
+
+\end{document}
