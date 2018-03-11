@@ -1,0 +1,62 @@
+\documentclass[beamer]{standalone}
+
+\usepackage{tikz}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{fit}
+\usetikzlibrary{positioning}
+
+\begin{document}
+
+\begin{standaloneframe}
+
+\definecolor{almost-white}{RGB}{254,254,254}
+\begin{tikzpicture}[
+    background rectangle/.style={ draw=almost-white, },
+    show background rectangle,
+    arrow/.style = {->,-latex},
+]
+    \node [
+        fill=black!10,
+        rounded corners,
+        minimum width=3cm,
+        minimum height=1.5cm,
+    ]
+    (F) {};
+
+    \only<1>{
+        \node [above right=0 and 1cm of F.south west, anchor=south east] {PFE};
+    }
+    \only<2>{
+        \node [above right=0 and 1cm of F.south west, anchor=south east] {SFE};
+        \node at (F.center) {\(UC(C, x)\)};
+    }
+
+    \draw [dashed] (F.north) to ++(0, 1.5);
+
+    \node [above left=1cm and .5cm of F.north west] (alice) {\textbf{Alice}};
+    \only<1>{
+        \node [above left=.5cm and 1cm of F.north west, anchor=base] (f) {\(f\)};
+    }
+    \only<2>{
+        \node [above left=.5cm and 1cm of F.north west, anchor=base] (f) {\(C\)};
+    }
+    \draw [arrow, bend left] (f.east) to ([xshift=-1cm]F.north);
+
+    \node [above right=1cm and .5cm of F.north east] (bob) {\textbf{Bob}};
+    \node [above right=.5cm and 1cm of F.north east, anchor=base] (x) {\(x\)};
+    \draw [arrow, bend right] (x.west) to ([xshift=+1cm]F.north);
+
+    \only<1>{
+        \node [below=.5cm of F.south, anchor=north] (fx) {\(f(x)\)};
+    }
+    \only<2>{
+        \node [below=.5cm of F.south, anchor=north] (fx) {\(C(x)\)};
+    }
+    \draw [arrow] (F.south) to (fx);
+
+
+\end{tikzpicture}
+
+\end{standaloneframe}
+
+\end{document}

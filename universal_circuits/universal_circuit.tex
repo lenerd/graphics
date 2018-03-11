@@ -1,0 +1,40 @@
+\documentclass[beamer]{standalone}
+
+\usepackage{tikz}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{fit}
+\usetikzlibrary{positioning}
+
+\begin{document}
+
+\begin{standaloneframe}
+
+\definecolor{almost-white}{RGB}{254,254,254}
+\begin{tikzpicture}[
+    background rectangle/.style={ draw=almost-white, },
+    show background rectangle,
+    arrow/.style = {->,-latex},
+]
+    \node [
+        draw,
+        % fill=black!10,
+        % rounded corners,
+        minimum width=1.5cm,
+        minimum height=1.5cm,
+    ]
+    (UC) {UC};
+
+    \node [above left=.8cm and .4cm of UC.north, anchor=base] (C) {\(C\)};
+    \node [above right=.8cm and .4cm of UC.north, anchor=base] (x) {\(x\)};
+    \draw [arrow] (C) to ([xshift=-.4cm]UC.north);
+    \draw [arrow] (x) to ([xshift=+.4cm]UC.north);
+
+    \node [below=.5cm of UC.south, anchor=north] (Cx) {\(C(x)\)};
+    \draw [arrow] (UC.south) to (Cx);
+
+
+\end{tikzpicture}
+
+\end{standaloneframe}
+
+\end{document}

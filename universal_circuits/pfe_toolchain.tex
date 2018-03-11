@@ -1,0 +1,91 @@
+\documentclass[beamer]{standalone}
+
+\usepackage{tikz}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{fit}
+\usetikzlibrary{positioning}
+
+\begin{document}
+
+\begin{standaloneframe}
+
+\definecolor{almost-white}{RGB}{254,254,254}
+\begin{tikzpicture}[
+    background rectangle/.style={ draw=almost-white, },
+    show background rectangle,
+    arrow/.style = {->,-latex},
+]
+
+    \onslide<2->{
+        \node (circ) {circuit description};
+    }
+    \onslide<3->{
+        \node [below=.6cm of circ] (eug-embed) {EUG embedding};
+    }
+    \onslide<4->{
+        \node [below=.6cm of eug-embed] (uc-prog) {UC programming};
+        \node [right=of uc-prog] (uc) {UC};
+    }
+    \onslide<3->{
+        \node (eug) at (circ -| uc) {EUG};
+    }
+
+    \begin{scope}[on background layer]
+        \onslide<2->{
+            \node [rounded corners, fill=gray!20, fit=(circ) (eug) (eug-embed) (uc-prog) (uc)] (tool) {};
+        }
+    \end{scope}
+
+    \onslide<2->{
+        \node [draw, rounded corners, left=.7 of circ] (comp) {compiler};
+    }
+    \node [above=.5cm of comp] (func) {functionality \(f\)};
+
+    \onslide<5->{
+        \node [draw, minimum width=2.5cm, minimum height=1cm, rounded corners, below=.6cm of uc] (sfe) {SFE framework};
+    }
+    \onslide<6->{
+        \node [below=.5 of sfe] (fx) {\(f(x)\)};
+    }
+
+    \path (circ) to coordinate (c-e) (eug);
+    \coordinate (fn-se) at (func.north -| sfe.east);
+    \coordinate (fn-ce) at (func.north -| c-e);
+    \draw [dashed] (fn-ce) to (sfe.north -| c-e);
+    \draw [dashed] (fn-se) to (sfe.north east);
+
+    \path (fn-ce) to node (public) {public} (fn-se);
+    \node [right=of fn-se] (bob) {Bob};
+    \node [left=of fn-ce] (alice) {Alice};
+
+    \node [below=.5cm of bob] (x) {input \(x\)};
+
+
+    \onslide<2->{
+        \draw [arrow] (func) to (comp);
+        \draw [arrow] (comp) to (circ);
+    }
+    \onslide<3->{
+        \draw [arrow] (circ) to (eug-embed);
+        \draw [arrow] (eug) to (eug-embed);
+    }
+    \onslide<4->{
+        \draw [arrow] (eug) to (uc);
+        \draw [arrow] (eug-embed) to (uc-prog);
+    }
+
+    \onslide<5->{
+        \draw [arrow] (uc.south) to (sfe.north);
+        \draw [arrow, in=180, out=270] (uc-prog.south) to node [below left] {\(C\)} (sfe.west);
+        \draw [arrow, in=0, out=270] (x.south) to (sfe.east);
+    }
+    \onslide<6->{
+        \draw [arrow] (sfe.south) to (fx.north);
+    }
+
+\end{tikzpicture}
+
+\end{standaloneframe}
+
+\end{document}
