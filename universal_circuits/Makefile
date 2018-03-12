@@ -13,7 +13,7 @@ IMG = \
 	hybrid_construction.pdf \
 	pfe_toolchain.pdf
 
-.phony: all clean
+.phony: all clean clean-all
 
 all: $(IMG)
 
@@ -22,5 +22,8 @@ all: $(IMG)
 	pdfcrop --margins "-1 -1 -1 -1" $@ $@
 
 clean:
-	latexmk -C
-	rm -f *.nav *.snm *.log *.bbl *.run.xml *.pdf
+	latexmk -c
+	rm -f *.nav *.snm *.log *.bbl *.run.xml
+
+clean-all: clean
+	rm -f *.pdf

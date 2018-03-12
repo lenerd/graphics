@@ -18,7 +18,7 @@ IMG_GARBLE = \
 KEY_LOCK_IMG=Key-gold.pdf Key-black.pdf Key-white.pdf Key-black-white.pdf \
 		 Lock-gold.pdf Lock-black.pdf Lock-white.pdf
 
-.phony: all clean
+.phony: all clean clean-all
 
 all: $(IMG) $(IMG_GARBLE) ${IMG_PROTO}
 
@@ -39,5 +39,8 @@ $(IMG_PROTO): %.pdf: %.tex
 	inkscape -A $@ $^
 
 clean:
-	latexmk -C
-	rm -f *.nav *.snm *.log *.pdf
+	latexmk -c
+	rm -f *.nav *.snm *.log
+
+clean-all: clean
+	rm -f *.pdf
